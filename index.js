@@ -40,10 +40,22 @@ async function run() {
     const jobCollection = client.db('talentDatabase').collection('jobDB');
 
     //display all jobs 
-    app.get('/jobs', async(req, res)=>{
+    app.get('/alljobs', async(req, res)=>{
         const cursor = jobCollection.find();
         const result = await cursor.toArray();
         res.send(result);
+    })
+    // get jobs by category name 
+    app.get('/jobs', async(req, res)=>{
+      console.log(req.query.category_key);
+      let query={};
+      if(req.query?.category_key){
+        query = {category_key: req.query.category_key};
+        const result = await jobCollection.find(query).toArray();
+        res.send(result);
+      }
+      else
+        res.send({message:"Love u!"});
     })
     // post user data from client side 
     app.post('/users-data', async(req, res)=>{
