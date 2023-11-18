@@ -45,6 +45,26 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    // post user data from client side 
+    app.post('/users-data', async(req, res)=>{
+        const user = req.body;
+        console.log(user);
+        const result = await userCollection.insertOne(user);
+        res.send(result);
+    })
+    // display user data based on email
+    app.get('/users', async(req, res)=>{
+        // console.log(req.query.email);
+        let query = {};
+        if(req.query?.email){
+          query = {email: req.query.email};
+          const result = await userCollection.find(query).toArray();
+          res.send(result);
+        }
+        else{
+          res.status(401).send({message: "Unauthorized access"});
+        }
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
