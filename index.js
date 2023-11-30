@@ -58,10 +58,12 @@ async function run() {
         res.send({message:"Unauthorized!"});
     })
     // get jobs by category name hybrid and id 
-    // app.get('/jobs/:id1/:id2',async(req, res)=>{
-    //   console.log(req.id1, req.id2);
-    //   res.send('Hello');
-    // })
+    app.get('/jobs/:id1/:id2',async(req, res)=>{
+      const id1 = req.params.id1;
+      const id2 = req.params.id2;
+      console.log(id1, id2);
+      res.send('Hello');
+    })
     // post user data from client side 
     app.post('/users-data', async(req, res)=>{
         const user = req.body;
