@@ -20,7 +20,7 @@ app.listen(port, ()=>{
 })
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.5hsri61.mongodb.net/?retryWrites=true&w=majority`;
 
 // Mongodb connect
@@ -44,6 +44,14 @@ async function run() {
         const cursor = jobCollection.find();
         const result = await cursor.toArray();
         res.send(result);
+    })
+    // get single job 
+    app.get('/job-detail/:id',async(req, res)=>{
+      const id = req.params.id;
+      console.log(id);
+      const query = {_id: new ObjectId(id)};
+      const result = await jobCollection.findOne(query);
+      res.send(result);
     })
     // get jobs by category name 
     app.get('/jobs', async(req, res)=>{
