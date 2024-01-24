@@ -45,6 +45,12 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    //post a job 
+    app.post('/alljobs', async(req, res)=>{
+      const data = req.body;
+      const result = await jobCollection.insertOne(data);
+      res.send(result);
+    })
     // get single job 
     app.get('/job-detail/:id',async(req, res)=>{
       const id = req.params.id;
