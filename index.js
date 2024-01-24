@@ -38,6 +38,7 @@ async function run() {
     await client.connect();
     const userCollection = client.db('talentDatabase').collection('userDB');
     const jobCollection = client.db('talentDatabase').collection('jobDB');
+    const appliedJobCollection = client.db('talentDatabase').collection('appliedJobDB');
 
     //display all jobs 
     app.get('/alljobs', async(req, res)=>{
@@ -50,6 +51,19 @@ async function run() {
       const data = req.body;
       const result = await jobCollection.insertOne(data);
       res.send(result);
+    })
+    // get my jobs where passing email as parameter 
+    app.get('/myjobs', async(req, res)=>{
+      console.log(req.query.userEmail);
+      let query = {};
+      if(req.query?.userEmail){
+        query = {userEmail: req.query.userEmail};
+        const result = await jobCollection.find(query).toArray();
+        res.send(result);
+      }
+      else{
+        res.send({message:"Unauthorized!"});
+      }
     })
     // get single job 
     app.get('/job-detail/:id',async(req, res)=>{
@@ -98,6 +112,19 @@ async function run() {
           res.status(401).send({message: "Unauthorized access"});
         }
     })
+    // applied job data post 
+    app.post('/appliedjob', async(req, res)=>{
+      const job = req.body;
+      const result = await appliedJobCollection.insertOne(job);
+      res.send(result);
+    })
+
+    // get all applied jobs 
+    app.get('/appliedjob', async(req, res)=>{
+      const result = await appliedJobCollection.find().toArray();
+      res.send(result);
+    })
+    // get all appliedjob data by passing email and job id 
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
