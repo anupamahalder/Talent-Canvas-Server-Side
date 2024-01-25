@@ -120,14 +120,25 @@ async function run() {
     })
 
     // get all applied jobs 
+    // app.get('/appliedjob', async(req, res)=>{
+    //   const result = await appliedJobCollection.find().toArray();
+    //   res.send(result);
+    // })
+    // get all appliedjob data by passing email
     app.get('/appliedjob', async(req, res)=>{
-      const result = await appliedJobCollection.find().toArray();
-      res.send(result);
+      let query={};
+      if(req.query?.email){
+        query = {email: req.query.email};
+        const result = await appliedJobCollection.find(query).toArray();
+        res.send(result);
+      }
+      else{
+        res.send(401).send({message: "Unauthorzied access"});
+      }
     })
-    // get all appliedjob data by passing email and job id 
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
   }
