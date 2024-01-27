@@ -73,6 +73,46 @@ async function run() {
       const result = await jobCollection.findOne(query);
       res.send(result);
     })
+    // update job only increment by 1
+    app.post('/update-job-increment/:id', async (req, res) => {
+      const id = req.params.id;
+
+      try {
+          const query = { _id: new ObjectId(id) };
+          const result = await jobCollection.updateOne(query, { $inc: { jobApplicantsNumber: 1 } });
+
+          if (result.modifiedCount === 1) {
+              res.status(200).json({ message: 'Job updated successfully' });
+          } else {
+              res.status(404).json({ message: 'Job not found' });
+          }
+      } catch (error) {
+          console.error('Error updating job:', error);
+          res.status(500).json({ message: 'Internal server error' });
+      }
+    });
+    // update job by id 
+    app.put('/update-job/:id', async(req, res)=>{
+      const id = req.params.id;
+      const job = req.body;
+      const filter = {_id: new ObjectId(id)};
+      // if data not exists will be created then 
+      const option = {upsert: true};
+      const updatedUser = {
+        $Set:{
+          // update property 
+          jobBannerImageUrl: job.jobBannerImageUrl,
+          jobTitle: job.jobTitle,
+          jobCategory: job.jobCategory,
+          category_key: job.category_key,
+          salaryRange: job.salaryRange,
+          jobDescription: job.jobDescription,
+          applicationDeadline: job.applicationDeadline,
+        }
+      }
+      const result = await jobCollection.updateOne(filter, updatedUser, option);
+      res.send(result);
+    })
     // get jobs by category name 
     app.get('/jobs', async(req, res)=>{
       console.log(req.query.category_key);
