@@ -54,7 +54,6 @@ async function run() {
     })
     // get my jobs where passing email as parameter 
     app.get('/myjobs', async(req, res)=>{
-      console.log(req.query.userEmail);
       let query = {};
       if(req.query?.userEmail){
         query = {userEmail: req.query.userEmail};
@@ -68,7 +67,6 @@ async function run() {
     // get single job 
     app.get('/job-detail/:id',async(req, res)=>{
       const id = req.params.id;
-      console.log(id);
       const query = {_id: new ObjectId(id)};
       const result = await jobCollection.findOne(query);
       res.send(result);
@@ -87,7 +85,6 @@ async function run() {
               res.status(404).json({ message: 'Job not found' });
           }
       } catch (error) {
-          console.error('Error updating job:', error);
           res.status(500).json({ message: 'Internal server error' });
       }
     });
@@ -99,7 +96,7 @@ async function run() {
       // if data not exists will be created then 
       const option = {upsert: true};
       const updatedUser = {
-        $Set:{
+        $set:{
           // update property 
           jobBannerImageUrl: job.jobBannerImageUrl,
           jobTitle: job.jobTitle,
@@ -115,7 +112,6 @@ async function run() {
     })
     // get jobs by category name 
     app.get('/jobs', async(req, res)=>{
-      console.log(req.query.category_key);
       let query={};
       if(req.query?.category_key){
         query = {category_key: req.query.category_key};
@@ -125,17 +121,22 @@ async function run() {
       else
         res.send({message:"Unauthorized!"});
     })
+    // delete job by id 
+    app.delete('/delete-job/:id', async(req, res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await jobCollection.deleteOne(query);
+      res.send(result);
+    })
     // get jobs by category name hybrid and id 
     app.get('/jobs/:id1/:id2',async(req, res)=>{
       const id1 = req.params.id1;
       const id2 = req.params.id2;
-      console.log(id1, id2);
       res.send('Hello');
     })
     // post user data from client side 
     app.post('/users-data', async(req, res)=>{
         const user = req.body;
-        console.log(user);
         const result = await userCollection.insertOne(user);
         res.send(result);
     })
