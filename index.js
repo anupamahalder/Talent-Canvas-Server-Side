@@ -9,7 +9,7 @@ const port = process.env.PORT || 5050;
 //parsers to parser data
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173'],
+    origin: ['https://65ba99ebc67bb50cd7405f5d--comfy-horse-ca927e.netlify.app/','http://localhost:5173'],
 }))
 
 app.get('/',(req, res)=>{
@@ -35,7 +35,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const userCollection = client.db('talentDatabase').collection('userDB');
     const jobCollection = client.db('talentDatabase').collection('jobDB');
     const appliedJobCollection = client.db('talentDatabase').collection('appliedJobDB');
