@@ -8,7 +8,7 @@ const port = process.env.PORT || 5050;
 //parsers to parser data
 app.use(express.json());
 app.use(cors({
-  origin: ['https://dancing-druid-d0cafd.netlify.app','https://effortless-cendol-77beba.netlify.app','https://silly-malasada-3c431e.netlify.app', 'http://localhost:5173', 'http://localhost:5174'],
+  origin: '*',
 }));
 
 app.get('/',(req, res)=>{
