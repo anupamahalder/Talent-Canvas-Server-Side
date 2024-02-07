@@ -1,7 +1,6 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 
 const app = express();
 const port = process.env.PORT || 5050;
@@ -9,8 +8,8 @@ const port = process.env.PORT || 5050;
 //parsers to parser data
 app.use(express.json());
 app.use(cors({
-    origin: ['https://65ba99ebc67bb50cd7405f5d--comfy-horse-ca927e.netlify.app/','http://localhost:5173'],
-}))
+  origin: ['https://dancing-druid-d0cafd.netlify.app','https://silly-malasada-3c431e.netlify.app', 'http://localhost:5173', 'http://localhost:5174'],
+}));
 
 app.get('/',(req, res)=>{
     res.send('Talent canvas server is running...');
